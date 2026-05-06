@@ -4,7 +4,27 @@ import joblib
 import os
 import time
 
-MODEL_PATH = "student_exam_pass_fail_model.joblib"
+current_dir = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(current_dir, "student_exam_pass_fail_model.joblib")
+# ---------------- MODEL ----------------
+# هذا السطر يحدد مجلد الملف الحالي بدقة
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "student_exam_pass_fail_model.joblib")
+
+@st.cache_resource
+def load_assets():
+    if os.path.exists(MODEL_PATH):
+        try:
+            return joblib.load(MODEL_PATH)
+        except Exception as e:
+            st.error(f"خطأ في تحميل الموديل: {e}")
+            return None
+    else:
+        # هذه الرسالة ستخبرك أين يبحث الكود بالضبط حالياً
+        st.error(f"❌ لم يتم العثور على الموديل في: {MODEL_PATH}")
+    return None
+
+assets = load_assets()
 
 # ---------------- CONFIG ----------------
 st.set_page_config(
@@ -86,16 +106,28 @@ h1, h2, h3, h4 {{
 """, unsafe_allow_html=True)
 
 # ---------------- MODEL ----------------
-MODEL_PATH = r"D:\Universty\Pattern\Project\student_exam_pass_fail_model.joblib"
+# الحصول على مسار المجلد الحالي الذي يحتوي على ملف app.py
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# دمج مسار المجلد مع اسم ملف الموديل لضمان الوصول إليه بدقة
+MODEL_PATH = os.path.join(BASE_DIR, "student_exam_pass_fail_model.joblib")
 
 @st.cache_resource
 def load_assets():
+    # التأكد من وجود الملف فعلياً في المسار المحسوب
     if os.path.exists(MODEL_PATH):
-        return joblib.load(MODEL_PATH)
+        try:
+            return joblib.load(MODEL_PATH)
+        except Exception as e:
+            st.error(f"Error loading model file: {e}")
+            return None
+    else:
+        # هذه الرسالة ستظهر لك المسار الذي يبحث فيه الكود الآن لتتأكد من وجود الملف هناك
+        st.error(f"❌ Model file not found at: {MODEL_PATH}")
+        st.info("Check if the .joblib file is in the same folder as app.py")
     return None
 
 assets = load_assets()
-
 # ---------------- HEADER ----------------
 st.title("🎓 Student Success AI")
 st.caption("Predict. Analyze. Improve.")
