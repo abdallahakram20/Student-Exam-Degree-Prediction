@@ -4,6 +4,8 @@ import joblib
 import os
 import time
 
+MODEL_PATH = "student_exam_pass_fail_model.joblib"
+
 # ---------------- CONFIG ----------------
 st.set_page_config(
     page_title="Student AI Predictor",
