@@ -4,10 +4,14 @@ import joblib
 import os
 import time
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(current_dir, "student_exam_pass_fail_model.joblib")
-# ---------------- MODEL ----------------
-# هذا السطر يحدد مجلد الملف الحالي بدقة
+# =============== CONFIG ===============
+st.set_page_config(
+    page_title="Student AI Predictor",
+    page_icon="🎓",
+    layout="wide"
+)
+
+# =============== MODEL PATH ===============
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "student_exam_pass_fail_model.joblib")
 
@@ -17,26 +21,18 @@ def load_assets():
         try:
             return joblib.load(MODEL_PATH)
         except Exception as e:
-            st.error(f"خطأ في تحميل الموديل: {e}")
+            st.error(f"Error loading model file: {e}")
             return None
     else:
-        # هذه الرسالة ستخبرك أين يبحث الكود بالضبط حالياً
-        st.error(f"❌ لم يتم العثور على الموديل في: {MODEL_PATH}")
+        st.error(f"❌ Model file not found at: {MODEL_PATH}")
+        st.info("Check if the .joblib file is in the same folder as app.py")
     return None
 
 assets = load_assets()
 
-# ---------------- CONFIG ----------------
-st.set_page_config(
-    page_title="Student AI Predictor",
-    page_icon="🎓",
-    layout="wide"
-)
-
-# ---------------- THEME SWITCH ----------------
+# =============== THEME & CSS ===============
 theme = st.toggle("🌙 Dark Mode", value=True)
 
-# ---------------- CSS ----------------
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
@@ -89,58 +85,38 @@ h1, h2, h3, h4 {{
 .footer {{
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     text-align: center;
     padding: 10px;
-    font-size: 14px;
     background: rgba(0,0,0,0.7);
     color: white;
+    z-index: 999;
 }}
 
 .footer a {{
-    color: #00c6ff;
+    color: #4f46e5;
     text-decoration: none;
+    font-weight: bold;
 }}
 
+.footer a:hover {{
+    text-decoration: underline;
+}}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- MODEL ----------------
-# الحصول على مسار المجلد الحالي الذي يحتوي على ملف app.py
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# دمج مسار المجلد مع اسم ملف الموديل لضمان الوصول إليه بدقة
-MODEL_PATH = os.path.join(BASE_DIR, "student_exam_pass_fail_model.joblib")
-
-@st.cache_resource
-def load_assets():
-    # التأكد من وجود الملف فعلياً في المسار المحسوب
-    if os.path.exists(MODEL_PATH):
-        try:
-            return joblib.load(MODEL_PATH)
-        except Exception as e:
-            st.error(f"Error loading model file: {e}")
-            return None
-    else:
-        # هذه الرسالة ستظهر لك المسار الذي يبحث فيه الكود الآن لتتأكد من وجود الملف هناك
-        st.error(f"❌ Model file not found at: {MODEL_PATH}")
-        st.info("Check if the .joblib file is in the same folder as app.py")
-    return None
-
-assets = load_assets()
-# ---------------- HEADER ----------------
+# =============== HEADER ===============
 st.title("🎓 Student Success AI")
 st.caption("Predict. Analyze. Improve.")
 
-# ---------------- MAIN ----------------
+# =============== MAIN ===============
 if assets:
+    col1, col2 = st.columns([1, 2])
 
-    col1, col2 = st.columns([1,2])
-
-    # -------- INPUT --------
+    # INPUT SECTION
     with col1:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-
         st.subheader("🧾 Student Data")
 
         hours = st.number_input("Study Hours", 0.1, 24.0, 5.0, 0.5)
@@ -150,19 +126,18 @@ if assets:
         st.metric("Efficiency", f"{eff_display:.2f}")
 
         predict_btn = st.button("🚀 Predict Now", use_container_width=True)
-
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # -------- RESULT --------
+    # RESULT SECTION
     with col2:
-
         if predict_btn:
-
             with st.spinner("Analyzing..."):
                 time.sleep(1)
 
-                input_df = pd.DataFrame([[hours, score]],
-                                        columns=['Study Hours', 'Previous Exam Score'])
+                input_df = pd.DataFrame(
+                    [[hours, score]],
+                    columns=['Study Hours', 'Previous Exam Score']
+                )
 
                 input_df['Efficiency'] = input_df['Previous Exam Score'] / (input_df['Study Hours'] + 1)
                 input_df = input_df[['Study Hours', 'Previous Exam Score', 'Efficiency']]
@@ -173,7 +148,6 @@ if assets:
 
                     processed = preprocessor.transform(input_df)
                     prediction = model.predict(processed)[0]
-
                     probs = model.predict_proba(processed)[0]
                     pass_probability = probs[1] * 100
 
@@ -205,39 +179,16 @@ if assets:
 
                 except Exception as e:
                     st.error(f"Error: {e}")
-
         else:
             st.info("👉 Enter data and click Predict")
 
 else:
     st.error("❌ Model not found")
 
-# ---------------- FOOTER ----------------
+# =============== FOOTER ===============
 st.markdown("""
-<style>
-.footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-    background: rgba(0,0,0,0.7);
-    color: white;
-    z-index: 999;
-}
-.footer a {
-    color: #4f46e5;
-    text-decoration: none;
-    font-weight: bold;
-}
-.footer a:hover {
-    text-decoration: underline;
-}
-</style>
-
 <div class="footer">
-    Built by Abdullah 👨‍💻 | 
+    Built by Abdullah 👨‍💻 |
     <a href="./About" target="_self">About</a>
 </div>
 """, unsafe_allow_html=True)
