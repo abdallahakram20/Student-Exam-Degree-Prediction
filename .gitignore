@@ -1,10 +1,21 @@
+# .gitignore - ML Project
 __pycache__/
 *.py[cod]
+*$py.class
 .env
 .venv/
 venv/
+ENV/
 *.pkl
 *.joblib
+model/
+models/
 .ipynb_checkpoints/
+*.ipynb_checkpoints
 .DS_Store
 *.log
+data/*.csv
+!data/sample.csv
+*.h5
+*.pb
+*.onnx
