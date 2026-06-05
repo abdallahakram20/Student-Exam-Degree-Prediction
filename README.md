@@ -1,42 +1,59 @@
+<div align="center">
+
 # 🎓 Student Success AI Predictor
 
-An end-to-end Machine Learning web application that predicts student academic outcomes (Pass/Fail) based on study habits and historical performance.
+[![Python](https://img.shields.io/badge/Python-3.10-blue)](https://python.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.0-FF4B4B)](https://streamlit.io)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Latest-orange)](https://scikit-learn.org)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+
+</div>
+
+## 🚀 Live Demo
+
+🌐 **[Try the App Live](https://your-streamlit-app-url-here)** — Deploy on Streamlit Cloud
+
+## 📸 Screenshot
+
+![App Screenshot](screenshot.png)
 
 ---
 
-## 🚀 Overview
+## 📖 About
 
-This project leverages Machine Learning to provide early insights into student performance.
-
-By analyzing key metrics like daily study hours and previous exam scores, the system:
-- Calculates a success probability
-- Predicts **Pass / Fail**
-- Uses a trained ML model for decision making
+AI-powered web app to predict student exam success (Pass/Fail) using Machine Learning and Streamlit.
 
 ---
 
-## ✨ Features
+## 📦 Installation
 
-- 🤖 **AI-Powered Predictions**  
-  Uses trained ML models (Logistic Regression / Random Forest) to predict student outcomes.
+```bash
+git clone https://github.com/abdallahakram20/Student-Exam-Degree-Prediction.git
+cd Student-Exam-Degree-Prediction
 
-- 🎛️ **Modern Interactive UI**  
-  Built with Streamlit for a clean and responsive dashboard experience.
+# Create virtual environment
+python -m venv venv
 
-- 📊 **Real-Time Analytics**  
-  Displays success probability with interactive visualizations.
+# Activate (Windows)
+venv\Scriptsctivate
+# Activate (Mac/Linux)
+source venv/bin/activate
 
-- 🧠 **Feature Engineering**  
-  Automatically computes student efficiency for improved model performance.
+# Install dependencies
+pip install -r requirements.txt
 
-- 🌗 **Dark / Light Mode**  
-  Adaptive UI for better user experience.
+# Run the app
+streamlit run app.py
+```
 
----
+## 🚀 Deployment on Streamlit Cloud
 
-## 🛠️ Tech Stack
+1. Fork this repository
+2. Go to [share.streamlit.io](https://share.streamlit.io)
+3. Connect your GitHub account
+4. Select this repository
+5. Deploy!
 
-- **Language:** Python 3.10  
-- **Machine Learning:** Scikit-Learn, Pandas, Joblib  
-- **Web Framework:** Streamlit  
-- **Visualization:** Plotly  
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
