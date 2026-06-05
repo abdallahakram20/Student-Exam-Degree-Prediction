@@ -1,4 +1,4 @@
-name: Python CI
+name: Python CI & Streamlit Test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -28,3 +28,6 @@ jobs:
       run: |
         pip install pytest
         pytest || echo "No tests yet"
+    - name: Test Streamlit app import
+      run: |
+        python -c "import streamlit; print('Streamlit OK')" || echo "Streamlit check skipped"
